@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-err');
 const InternalServerError = require('../errors/internal-server-err');
 const ValidationError = require('../errors/validation-err');
+const AuthError = require('../errors/auth-err');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -22,10 +23,11 @@ module.exports.createUser = (req, res, next) => {
       avatar: user.avatar,
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError') return res.status(400).send('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;');
-      if (err.name === 'CastError') return res.status(400).send('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;');
-      if (err.name === 'Not Found') return res.status(404).send('Карточка или пользователь не найден.');
-      return next('Произошла ошибка');
+      if (err.name === 'MongoError') return res.status(409).send(new ValidationError());
+      if (err.name === 'ValidationError') return res.status(400).send(new ValidationError());
+      if (err.name === 'CastError') return res.status(400).send(new ValidationError());
+      if (err.name === 'Not Found') return res.status(404).send(new NotFoundError());
+      return next(new InternalServerError());
     });
 };
 
@@ -37,12 +39,11 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      // next(new AuthError('Ошибка авторизации'));
-      res.send(err.message);
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      if (err.message === 'Not Found') next(new NotFoundError());
+      next(new AuthError(err.message));
     });
 };
 
@@ -56,11 +57,11 @@ module.exports.getUserMe = (req, res, next) => {
       email: user.email,
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      next(new InternalServerError('Произошла ошибка'));
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      if (err.message === 'Not Found') next(new NotFoundError());
+      next(new InternalServerError());
     });
 };
 
@@ -76,10 +77,10 @@ module.exports.updateUser = (req, res, next) => {
     })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      next(new InternalServerError('Произошла ошибка'));
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      if (err.message === 'Not Found') next(new NotFoundError());
+      next(new InternalServerError());
     });
 };

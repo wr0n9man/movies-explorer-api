@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new AuthError('Необходима авторизация'));
+    next(new AuthError());
   }
 
   const token = extractBearerToken(authorization);
@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'top-secret');
   } catch (err) {
-    next(new AuthError('Необходима авторизация'));
+    next(new AuthError());
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса

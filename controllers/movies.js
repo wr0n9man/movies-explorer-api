@@ -19,11 +19,11 @@ module.exports.getMovie = (req, res, next) => {
       res.send(myMovies);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      next(new InternalServerError('Произошла ошибка'));
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      if (err.message === 'Not Found') next(new NotFoundError());
+      next(new InternalServerError());
     });
 };
 
@@ -58,10 +58,10 @@ module.exports.createMovie = (req, res, next) => {
   })
     .then((movie) => res.send(movie))
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      next(new InternalServerError('Произошла ошибка'));
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      next(new InternalServerError());
     });
 };
 
@@ -78,23 +78,23 @@ module.exports.deleteMovie = (req, res, next) => {
           })
           .then((movieDelete) => res.send(movieDelete))
           .catch((err) => {
-            if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-            if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-            if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-            if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-            next(new InternalServerError('Произошла ошибка'));
+            if (err.name === 'ValidationError') next(new ValidationError());
+            if (err.name === 'CastError') next(new ValidationError());
+            if (err.name === 'Not Found') next(new NotFoundError());
+            if (err.message === 'Not Found') next(new NotFoundError());
+            next(new InternalServerError());
           });
       } else {
         const err = new Error('У вас нет прав для данной операции');
-        err.statusCode = 409;
+        err.statusCode = 403;
         next(err);
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'CastError') next(new ValidationError('Переданы некорректные данные в методы создания карточки, пользователя, обновления аватара пользователя или профиля;'));
-      if (err.name === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      if (err.message === 'Not Found') next(new NotFoundError('Карточка или пользователь не найден.'));
-      next(new InternalServerError('Произошла ошибка'));
+      if (err.name === 'ValidationError') next(new ValidationError());
+      if (err.name === 'CastError') next(new ValidationError());
+      if (err.name === 'Not Found') next(new NotFoundError());
+      if (err.message === 'Not Found') next(new NotFoundError());
+      next(new InternalServerError());
     });
 };

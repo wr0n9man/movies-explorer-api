@@ -1,11 +1,14 @@
 const cors = require('cors');
+const rateLimit = require("express-rate-limit");
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const { isCelebrateError } = require('celebrate');
 const index = require('./routes/index');
+const errorHandler = require ('./middlewares/errorHandler')
 
+const { NODE_ENV, MONGO_PORT } = process.env;
 const { PORT = 3001 } = process.env;
 const app = express();
 
@@ -22,7 +25,17 @@ const options = {
 
 app.use(cors(options));
 
-mongoose.connect('mongodb://localhost:27017/diplomdb', {
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+//  apply to all requests
+app.use(limiter);
+
+app.use(helmet());
+
+mongoose.connect(NODE_ENV === 'production' ? MONGO_PORT : 'mongodb://localhost:27017/diplomdb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -30,22 +43,13 @@ mongoose.connect('mongodb://localhost:27017/diplomdb', {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(requestLogger);
 
-app.use('/api/', index);
+app.use('/', index);
 
 app.use(errorLogger);
 
-app.use((err, req, res, next) => {
-  if (!isCelebrateError(err)) {
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode).send({ message: err.message });
-  } else {
-    res.status(400).send({ message: 'Переданы некорректные данные' });
-  }
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT);

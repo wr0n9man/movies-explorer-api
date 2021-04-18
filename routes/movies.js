@@ -10,18 +10,18 @@ router.post('/movies', celebrate({
     duration: Joi.number().integer().required().max(1000),
     year: Joi.number().integer().required().min(1800),
     description: Joi.string().required(),
-    image: Joi.string().required().min(6),
-    trailer: Joi.string().required().min(6),
+    image: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
+    trailer: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
     nameRU: Joi.string().required().min(1),
     nameEN: Joi.string().required().min(1),
-    thumbnail: Joi.string().required().min(6),
+    thumbnail: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
     movieId: Joi.number().required(),
   }),
 }), createMovie);
 router.delete('/movies/:movieId', celebrate({
   // валидируем параметры
   params: Joi.object().keys({
-    movieId: Joi.string().alphanum().length(24),
+    movieId: Joi.string().hex().length(24),
   }),
 }), deleteMovie);
 
