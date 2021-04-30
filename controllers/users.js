@@ -20,7 +20,6 @@ module.exports.createUser = (req, res, next) => {
       name: user.name,
       email: user.email,
       about: user.about,
-      avatar: user.avatar,
     }))
     .catch((err) => {
       if (err.name === 'MongoError') return res.status(409).send(new ValidationError());
