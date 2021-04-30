@@ -16,11 +16,11 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => res.status(200).send({
-      name: user.name,
-      email: user.email,
-      about: user.about,
-    }))
+    .then((user) => { 
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'top-secret', { expiresIn: '7d' });
+      res.send({ token });
+  }
+    )
     .catch((err) => {
       if (err.name === 'MongoError') return res.status(409).send(new ValidationError());
       if (err.name === 'ValidationError') return res.status(400).send(new ValidationError());
