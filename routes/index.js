@@ -6,14 +6,14 @@ const auth = require('../middlewares/auth');
 const user = require('./users');
 const movie = require('./movies');
 
-router.post('/api//signin', celebrate({
+router.post('/api/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6),
   }),
 }), login);
 
-router.post('/api//signup', celebrate({
+router.post('/api/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
