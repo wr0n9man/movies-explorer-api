@@ -11,7 +11,7 @@ router.post('/movies', celebrate({
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
-    trailer: Joi.string().pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/).required().min(6),
+    trailer: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-\?]*)*\/?$/).required().min(6),
     nameRU: Joi.string().required().min(1),
     nameEN: Joi.string().required().min(1),
     thumbnail: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
