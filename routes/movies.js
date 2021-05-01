@@ -8,7 +8,7 @@ router.post('/movies', celebrate({
     country: Joi.string().min(2).max(30).required(),
     director: Joi.string().min(2).max(30).required(),
     duration: Joi.number().integer().required().max(1000),
-    year: Joi.string().integer().required(),
+    year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/).required().min(6),
     trailer: Joi.string().pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/).required().min(6),
