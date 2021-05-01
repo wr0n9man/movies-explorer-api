@@ -60,20 +60,10 @@ const movieSchema = new mongoose.Schema({
   },
   nameRU: {
     type: String,
-    validate: {
-      validator(v) {
-        return /^[\W\s]+$/i.test(v);
-      },
-    },
     required: true,
   },
   nameEN: {
     type: String,
-    validate: {
-      validator(v) {
-        return /^[\w\s]+$/i.test(v);
-      },
-    },
     required: true,
   },
 });
