@@ -17,6 +17,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const options = {
   origin: [
     'http://localhost:3000',
+    'http://wr0n9man.movie.nomoredomains.icu'
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
